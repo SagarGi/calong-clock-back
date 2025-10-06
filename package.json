@@ -1,0 +1,30 @@
+{
+  "name": "calong-clock-back",
+  "version": "1.0.0",
+  "description": "This is the backend for the calong clock to track employee working hours time in the restaurant.",
+  "main": "app.js",
+  "scripts": {
+    "test": "",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SagarGi/calong-clock-back.git"
+  },
+  "author": "Sagar Gurung",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SagarGi/calong-clock-back/issues"
+  },
+  "homepage": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
