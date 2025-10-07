@@ -12,3 +12,5 @@ stylelint.cache
 dist/
 build/
 coverage/
+
+.env
