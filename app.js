@@ -32,7 +32,10 @@ app.get("/database", async (req, res) => {
       "Database is also running, Current time: " + result[0].currentTime
     );
   } catch (error) {
-    res.status(500).json({ error: "Database is not connected!" });
+    console.error("❌ Database connection failed:", error.message);
+    res
+      .status(500)
+      .json({ error: `Database is not connected! ${error.message}` });
   }
 });
 
