@@ -21,6 +21,7 @@ class AdminController {
         success: true,
         message: "Login successful",
         admin: result.admin,
+        token: result.token,
       });
     } catch (err) {
       res.status(500).json({ success: false, message: err.message });
