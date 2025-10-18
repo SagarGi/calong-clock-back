@@ -19,6 +19,10 @@ class Database {
     const [results] = await this.pool.execute(sql, params);
     return results;
   }
+
+  async close() {
+    await this.pool.end();
+  }
 }
 
 module.exports = new Database();
