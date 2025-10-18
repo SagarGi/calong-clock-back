@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const db = require("./config/db.js");
 const dbInitializer = require("./scripts/dbseed.js");
+const adminRoute = require("./routes/adminRoute.js");
 require("dotenv").config();
 
 const app = express();
@@ -42,6 +43,7 @@ app.get("/database", async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 dbInitializer.initializeTables().then(() => {
+  app.use("/api/admin", adminRoute);
   app.listen(3000, () => {
     console.log("🚀 Server running on http://localhost:3000");
   });
