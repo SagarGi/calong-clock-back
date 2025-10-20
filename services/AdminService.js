@@ -1,18 +1,17 @@
-const db = require("../config/db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const AdminModel = require("../models/AdminModel.js");
 const EmployeeModel = require("../models/EmployeeModel.js");
+const crypto = require("crypto");
 require("dotenv").config();
 
 class AdminService {
   async authenticate(username, password) {
     try {
-      const rows = AdminModel.findByUsername(username);
+      const rows = await AdminModel.findByUsername(username);
       if (rows.length === 0) {
         return { success: false, message: "Admin not found" };
       }
-
       const admin = rows[0];
       const matchPassword = await bcrypt.compare(password, admin.password);
       if (!matchPassword) {
@@ -39,43 +38,6 @@ class AdminService {
     }
   }
 
-  async changePassword(req, res) {
-    try {
-      const adminId = req.admin.id; // from verified JWT token
-      const { oldPassword, newPassword } = req.body;
-
-      if (!oldPassword || !newPassword) {
-        return res.status(400).json({
-          success: false,
-          message: "Old and new passwords are required",
-        });
-      }
-
-      const admin = await AdminModel.findById(adminId);
-      if (!admin) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Admin not found" });
-      }
-
-      const isMatch = await bcrypt.compare(oldPassword, admin.password);
-      if (!isMatch) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Old password is incorrect" });
-      }
-
-      const hashed = await bcrypt.hash(newPassword, 10);
-      await AdminModel.updatePassword(adminId, hashed);
-
-      res.json({ success: true, message: "Password updated successfully" });
-    } catch (err) {
-      console.error("Error changing password:", err.message);
-      res
-        .status(500)
-        .json({ success: false, message: "Internal server error" });
-    }
-  }
   async createEmployee(firstName, lastName, gender, nationality, position) {
     if (!firstName || !lastName || !gender || !nationality || !position) {
       throw new Error("All fields are required");

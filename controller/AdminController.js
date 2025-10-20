@@ -1,4 +1,6 @@
 const AdminService = require("../services/AdminService.js");
+const AdminModel = require("../models/AdminModel.js");
+const bcrypt = require("bcrypt");
 
 class AdminController {
   async login(req, res) {
@@ -30,14 +32,39 @@ class AdminController {
 
   async changePassword(req, res) {
     try {
+      const adminId = req.admin.id; // from verified JWT
       const { oldPassword, newPassword } = req.body;
-      const adminId = req.admin.id;
 
-      await AdminService.changePassword(adminId, oldPassword, newPassword);
+      if (!oldPassword || !newPassword) {
+        return res.status(400).json({
+          success: false,
+          message: "Old and new passwords are required",
+        });
+      }
+
+      const admin = await AdminModel.findById(adminId);
+      if (!admin) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Admin not found" });
+      }
+
+      const isMatch = await bcrypt.compare(oldPassword, admin.password);
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Old password is incorrect" });
+      }
+
+      const hashed = await bcrypt.hash(newPassword, 10);
+      await AdminModel.updatePassword(adminId, hashed);
 
       res.json({ success: true, message: "Password updated successfully" });
     } catch (err) {
-      res.status(400).json({ success: false, message: err.message });
+      console.error("Error changing password:", err.message);
+      res
+        .status(500)
+        .json({ success: false, message: "Internal server error" });
     }
   }
 
