@@ -2,6 +2,7 @@ const db = require("../config/db.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const AdminModel = require("../models/AdminModel.js");
+const EmployeeModel = require("../models/EmployeeModel.js");
 require("dotenv").config();
 
 class AdminService {
@@ -74,6 +75,62 @@ class AdminService {
         .status(500)
         .json({ success: false, message: "Internal server error" });
     }
+  }
+  async createEmployee(firstName, lastName, gender, nationality, position) {
+    if (!firstName || !lastName || !gender || !nationality || !position) {
+      throw new Error("All fields are required");
+    }
+    // Generate unique 4-digit pin for each employee registered
+    let pinCode;
+    let existing;
+    do {
+      pinCode = crypto.randomInt(1000, 9999).toString();
+      existing = await EmployeeModel.findByPin(pinCode);
+    } while (existing);
+
+    const id = await EmployeeModel.create(
+      firstName,
+      lastName,
+      gender,
+      nationality,
+      pinCode,
+      position
+    );
+
+    return { id, firstName, lastName, gender, nationality, pinCode, position };
+  }
+
+  async updateEmployee(id, firstName, lastName, gender, nationality, position) {
+    const employee = await EmployeeModel.findById(id);
+    if (!employee) throw new Error("Employee not found");
+
+    await EmployeeModel.update(
+      id,
+      firstName,
+      lastName,
+      gender,
+      nationality,
+      position
+    );
+    return { id, firstName, lastName, gender, nationality, position };
+  }
+
+  async deleteEmployee(id) {
+    const employee = await EmployeeModel.findById(id);
+    if (!employee) throw new Error("Employee not found");
+
+    await EmployeeModel.delete(id);
+    return { message: "Employee deleted successfully" };
+  }
+
+  async getAllEmployees() {
+    return await EmployeeModel.findAll();
+  }
+
+  async getEmployeeByPin(pinCode) {
+    const employee = await EmployeeModel.findByPin(pinCode);
+    if (!employee) throw new Error("Employee not found with that pin code");
+    return employee;
   }
 }
 
