@@ -33,14 +33,17 @@ class DatabaseInitializer {
 
   async createEmployeeTable() {
     try {
-      await this.db.query(`
-        CREATE TABLE IF NOT EXISTS employees (
-          id INT AUTO_INCREMENT PRIMARY KEY,
-          name VARCHAR(100) NOT NULL,
-          pin VARCHAR(10) UNIQUE NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-      `);
+      await db.query(`
+      CREATE TABLE IF NOT EXISTS employees (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        first_name VARCHAR(100) NOT NULL,
+        last_name VARCHAR(100) NOT NULL,
+        gender VARCHAR(10) NOT NULL,
+        nationality VARCHAR(100) NOT NULL,
+        pin_code VARCHAR(4) UNIQUE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
       console.log("✅ 'Employee' table ready");
     } catch (err) {
       console.error("❌ Failed to create 'employees' table:", err.message);
