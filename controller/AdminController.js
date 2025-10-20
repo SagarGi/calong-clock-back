@@ -27,5 +27,18 @@ class AdminController {
       res.status(500).json({ success: false, message: err.message });
     }
   }
+
+  async changePassword(req, res) {
+    try {
+      const { oldPassword, newPassword } = req.body;
+      const adminId = req.admin.id;
+
+      await AdminService.changePassword(adminId, oldPassword, newPassword);
+
+      res.json({ success: true, message: "Password updated successfully" });
+    } catch (err) {
+      res.status(400).json({ success: false, message: err.message });
+    }
+  }
 }
 module.exports = new AdminController();
