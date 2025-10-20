@@ -41,6 +41,7 @@ class DatabaseInitializer {
         gender VARCHAR(10) NOT NULL,
         nationality VARCHAR(100) NOT NULL,
         pin_code VARCHAR(4) UNIQUE NOT NULL,
+        position VARCHAR(100) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
