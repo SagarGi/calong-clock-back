@@ -54,14 +54,18 @@ class DatabaseInitializer {
   async createTimeEntryTable() {
     try {
       await this.db.query(`
-        CREATE TABLE IF NOT EXISTS time_entries (
-          id INT AUTO_INCREMENT PRIMARY KEY,
-          employee_id INT NOT NULL,
-          start_time DATETIME NOT NULL,
-          end_time DATETIME,
-          FOREIGN KEY (employee_id) REFERENCES employees(id)
-        )
-      `);
+      CREATE TABLE IF NOT EXISTS time_entries (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        employee_id INT NOT NULL,
+        hour INT NOT NULL,
+        minute INT NOT NULL,
+        day INT NOT NULL,
+        month INT NOT NULL,
+        total_hours DECIMAL(5,2) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
+      )
+    `);
       console.log("✅ 'Time Entry' table ready");
     } catch (err) {
       console.error("❌ Failed to create 'time_entries' table:", err.message);
