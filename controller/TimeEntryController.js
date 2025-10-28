@@ -42,6 +42,21 @@ class TimeEntryController {
       res.status(500).json({ message: "Server error", error: error.message });
     }
   }
+
+  async getEntriesByPincode(req, res) {
+    try {
+      const { pincode } = req.query;
+      if (!pincode) {
+        return res.status(400).json({ message: "pincode is required" });
+      }
+
+      const result = await TimeEntryService.getEntriesByPin(pincode);
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching employee entries:", error);
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  }
 }
 
 module.exports = new TimeEntryController();

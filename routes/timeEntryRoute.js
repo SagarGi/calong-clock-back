@@ -11,4 +11,7 @@ router.get("/get-entries/:pin_code", (req, res) =>
   TimeEntryController.getEntriesByPin(req, res)
 );
 
+// Get all entries for an employee by pincode
+router.get("/time-entries", TimeEntryController.getEntriesByPincode);
+
 module.exports = router;
