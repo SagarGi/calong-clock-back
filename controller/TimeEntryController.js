@@ -2,7 +2,7 @@ const TimeEntryService = require("../services/TimeEntryService.js");
 class TimeEntryController {
   async createTimeEntry(req, res) {
     try {
-      const { pin_code, hour, minute, day, month } = req.body;
+      const { pin_code, hour, minute, day, month, break_minutes } = req.body;
 
       if (!pin_code || !hour || !minute || !day || !month) {
         return res.status(400).json({ message: "All fields are required" });
@@ -14,6 +14,7 @@ class TimeEntryController {
         minute,
         day,
         month,
+        break_minutes,
       });
 
       res.status(201).json({

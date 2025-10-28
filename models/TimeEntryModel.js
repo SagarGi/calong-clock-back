@@ -1,10 +1,18 @@
 const db = require("../config/db.js");
 class TimeEntry {
-  async create(employee_id, hour, minute, day, month, total_hours) {
+  async create(
+    employee_id,
+    hour,
+    minute,
+    day,
+    month,
+    break_minutes,
+    total_hours
+  ) {
     const result = await db.query(
-      `INSERT INTO time_entries (employee_id, hour, minute, day, month, total_hours)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-      [employee_id, hour, minute, day, month, total_hours]
+      `INSERT INTO time_entries (employee_id, hour, minute, day, month, break_minutes ,total_hours)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [employee_id, hour, minute, day, month, break_minutes, total_hours]
     );
     return result.insertId;
   }
@@ -19,7 +27,7 @@ class TimeEntry {
 
   async getEntriesByEmployeeId(employee_id) {
     const rows = await db.query(
-      `SELECT hour, minute, day, month, total_hours, created_at
+      `SELECT hour, minute, day, month, break_minutes, total_hours, created_at
        FROM time_entries
        WHERE employee_id = ?`,
       [employee_id]

@@ -61,6 +61,7 @@ class DatabaseInitializer {
         minute INT NOT NULL,
         day INT NOT NULL,
         month INT NOT NULL,
+        break_minutes INT DEFAULT 0,
         total_hours DECIMAL(5,2) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE

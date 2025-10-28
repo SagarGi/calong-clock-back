@@ -1,7 +1,14 @@
 const TimeEntry = require("../models/TimeEntryModel.js");
 
 class TimeEntryService {
-  async createTimeEntry({ pin_code, hour, minute, day, month }) {
+  async createTimeEntry({
+    pin_code,
+    hour,
+    minute,
+    day,
+    month,
+    break_minutes = 0,
+  }) {
     // Find employee by pin
     // done for as to foreign key relationship
     const employee = await TimeEntry.findByEmployeePin(pin_code);
@@ -10,7 +17,7 @@ class TimeEntryService {
     const employee_id = employee.id;
 
     // Calculate total hours as decimal
-    const total_hours = parseFloat(hour) + parseFloat(minute) / 60;
+    const total_hours = hour + minute / 60 - break_minutes / 60;
 
     // Create time entry using model
     const entryId = await TimeEntry.create(
@@ -19,6 +26,7 @@ class TimeEntryService {
       minute,
       day,
       month,
+      break_minutes,
       total_hours
     );
 
@@ -29,6 +37,7 @@ class TimeEntryService {
       minute,
       day,
       month,
+      break_minutes,
       total_hours,
     };
   }
