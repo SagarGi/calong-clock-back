@@ -1,5 +1,6 @@
 const AdminService = require("../services/AdminService.js");
 const AdminModel = require("../models/AdminModel.js");
+const TimeEntryService = require("../services/TimeEntryService.js");
 const bcrypt = require("bcrypt");
 
 class AdminController {
@@ -140,6 +141,20 @@ class AdminController {
       res.json({ success: true, employee });
     } catch (err) {
       res.status(404).json({ success: false, message: err.message });
+    }
+  }
+
+  async getEmployeeTimeEntryByPin(req, res) {
+    try {
+      const { pin_code } = req.params;
+      if (!pin_code) {
+        return res.status(400).json({ message: "pincode is required" });
+      }
+      const result = await TimeEntryService.getEntriesByPin(pin_code);
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching employee entries:", error);
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 }

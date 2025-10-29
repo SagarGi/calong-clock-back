@@ -45,4 +45,9 @@ router.get("/employees/pin/:pin_code", verifyAdminToken, (req, res) =>
   AdminController.getEmployeeByPin(req, res)
 );
 
+// Get employee by pin
+router.get("/employees/time/:pin_code", verifyAdminToken, (req, res) =>
+  AdminController.getEmployeeTimeEntryByPin(req, res)
+);
+
 module.exports = router;
